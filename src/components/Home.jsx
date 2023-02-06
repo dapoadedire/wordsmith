@@ -136,7 +136,7 @@ export default function Home() {
                 {/* first wordData t only have audio, phonetics, etc */}
 
                 {index === 0 && (
-                  <div className="flex justify-between">
+                  <div className="flex gap-2 flex-wrap justify-between">
                     <h2 className="py-4 text-2xl font-bold">
                       {wordData.word}
                     </h2>
@@ -155,7 +155,10 @@ export default function Home() {
                             <FontAwesomeIcon icon={faPlayCircle} />
                           </span>
                           <span className="pl-2">
-                            {wordData.phonetics[0].text ? wordData.phonetics[0].text : wordData.phonetics[1].text}
+                            {wordData.phonetics[0] && wordData.phonetics[0].text ?
+                              wordData.phonetics[0].text :
+                              (wordData.phonetics[1] && wordData.phonetics[1].text ? wordData.phonetics[1].text : "?")
+                            }
                           </span>
                         </button>
                       </div>
