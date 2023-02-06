@@ -128,7 +128,9 @@ export default function Home() {
         {status === "success" && (
           <div>
             {searchResults.map((wordData, index) => (
-              <div key={index}>
+              <div key={index}
+              className="my-5  border-gray-400"
+              >
                 {/* first wordData t only have audio, phonetics, etc */}
 
                 {index === 0 && (
@@ -236,7 +238,49 @@ export default function Home() {
                   </div>
                 ))}
 
+                {/* sources */}
 
+               {/* only add sources to the last */}
+
+                {/* <p
+                  className="text-sm text-gray-500"
+                >Source: {wordData.sourceUrls[0]}</p>
+
+                <p
+                  className="text-sm text-gray-500"
+                >License: {wordData.license.name}</p> */}
+
+{
+                  index === searchResults.length - 1 && (
+                  <div>
+                      <p className="pb-3 text-sm text-gray-600">
+                      Sources:
+                     </p>
+                     <ul
+                     className=" text-sm  text-gray-500"
+                     >
+                        <li
+                          
+                        >
+                          <a href="https://www.dictionaryapi.com/" target="_blank" rel="noreferrer">
+                            https://www.dictionaryapi.com/
+                          </a>
+
+                        </li>
+                        <li
+                          
+                          >
+                          <a href={wordData.sourceUrls[0]} target="_blank" rel="noreferrer">
+                            {wordData.sourceUrls[0]}
+                          </a>
+                          </li>
+                     </ul>
+
+                      
+
+                    </div>
+                  )
+}
               </div>
             ))}
           </div>
