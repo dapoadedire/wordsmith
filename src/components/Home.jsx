@@ -68,7 +68,9 @@ export default function Home() {
           <input
             type="text"
             name="searchTerm"
-            className="flex-1 rounded border border-gray-500 p-3"
+            className="flex-1 rounded border border-gray-500 p-3
+            focus:border-2 focus:border-green-800 focus:outline-none
+            "
             required
             placeholder="Search for any word ..."
           />
@@ -210,7 +212,7 @@ export default function Home() {
                           </p>
                         )}
                         {definition.antonyms.length > 0 && (
-                          <p className="ml-4 text-sm text-gray-500">
+                          <p className="ml-4 py-2 text-sm">
                             Antonyms:{" "}
                             {definition.antonyms.map((antonym, index) => (
                               <span key={index}>
