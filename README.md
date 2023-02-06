@@ -52,3 +52,10 @@ The application has a clean and intuitive user interface, allowing users to easi
 6. Search for any word to get its definition, synonyms, antonyms and examples.
 
 Live Demo: <https://wordsmith-dapoadedire.vercel.app/>
+
+
+Screenshot.
+
+
+![image](https://user-images.githubusercontent.com/95668340/217042437-dea04536-b3b4-46cb-a2f5-5d48cb93054b.png)
+
