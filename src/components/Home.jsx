@@ -1,6 +1,6 @@
 /* eslint-disable jsx-a11y/anchor-is-valid */
 import { useState, useEffect } from "react";
-
+import loader from "../assets/images/loader.gif";
 import randomWord from "../utils/random-word";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -87,7 +87,13 @@ export default function Home() {
           </button>
         </form>
 
-        {status === "loading" && <p>Loading...</p>}
+        {status === "loading" && 
+          <div className="flex justify-center">
+            <img src={loader} alt="loading" />
+          </div>
+          
+            
+            }
         {status === "error" && <p>There was an error</p>}
 
         {status === "noresults" && (
