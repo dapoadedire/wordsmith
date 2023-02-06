@@ -56,8 +56,8 @@ export default function Home() {
 
   return (
     <>
-      <header>
-        <h1 className="pt-6 text-center font-serif text-3xl">WordSmith</h1>
+      <header className="py-5">
+        <h1 className="pt-6 text-center font-serif text-4xl">WordSmith</h1>
 
 
 
