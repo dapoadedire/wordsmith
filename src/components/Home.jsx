@@ -240,17 +240,7 @@ export default function Home() {
                   </div>
                 ))}
 
-                {/* sources */}
-
-               {/* only add sources to the last */}
-
-                {/* <p
-                  className="text-sm text-gray-500"
-                >Source: {wordData.sourceUrls[0]}</p>
-
-                <p
-                  className="text-sm text-gray-500"
-                >License: {wordData.license.name}</p> */}
+        
 
 {
                   index === searchResults.length - 1 && (
