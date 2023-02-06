@@ -4,13 +4,17 @@ import { useState, useEffect } from "react";
 import randomWord from "../utils/random-word";
 
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlay } from "@fortawesome/free-solid-svg-icons";
+import { faPlayCircle, faSearch } from "@fortawesome/free-solid-svg-icons";
 
-const API_URL = "https://api.dictionaryapi.dev/api/v2/entries/en/";
+import autocorrect from "../utils/autocorrect";
+
 export default function Home() {
   const [searchQuery, setSearchQuery] = useState(randomWord());
   const [searchResults, setSearchResults] = useState([]);
   const [status, setStatus] = useState("");
+  const API_URL = "https://api.dictionaryapi.dev/api/v2/entries/en/";
+  // const [font, setFont] = useState("font-mono");
+
 
   useEffect(() => {
     async function getResults() {
@@ -37,32 +41,49 @@ export default function Home() {
     setSearchQuery(event.target.searchTerm.value);
   }
 
-  function playAudio(url) {
-    const audio = new Audio(url);
-    audio.currentTime = 0;
-    audio.play();
-    console.log("play audio");
+  function playAudio(audioFile) {
+    try {
+      const audio = new Audio(audioFile);
+      audio.currentTime = 0;
+      audio.play();
+    }
+    catch (error) {
+      console.log(error);
+    }
   }
+
+
 
   return (
     <>
       <header>
-        <h1 className="text-center text-3xl font-bold underline">WordSmith</h1>
+        <h1 className="pt-6 text-center font-serif text-3xl">WordSmith</h1>
+
+
+
       </header>
-      <main className="mx-auto mt-5 w-10/12 md:w-2/3 lg:w-1/2">
-        <h1>Search for a word</h1>
-        <form onSubmit={handleSubmit}>
+      <main className="mx-auto mt-5 w-11/12 font-mono md:w-2/3 lg:w-1/2">
+
+        <form onSubmit={handleSubmit} className="my-8 flex w-full flex-1 flex-wrap justify-between gap-4">
           <input
             type="text"
             name="searchTerm"
-            className="rounded border border-gray-500 px-2"
+            className="flex-1 rounded border border-gray-500 p-3"
             required
+            placeholder="Search for any word ..."
           />
           <button
             type="submit"
-            className="mx-2 rounded border bg-blue-500 px-2 text-white"
+            className="rounded border bg-green-800 p-3 text-white outline-none
+            hover:bg-green-600 focus:bg-green-600
+            "
           >
-            Search
+            <span>
+              <FontAwesomeIcon icon={faSearch} />
+            </span>
+            <span className="pl-2">
+              Search
+            </span>
           </button>
         </form>
 
@@ -71,54 +92,107 @@ export default function Home() {
 
         {status === "noresults" && (
           <div>
-            <h2 className="text-2xl font-bold">No Definitions Found</h2>
-            <p>
+            <h2 className="py-4 text-2xl font-bold">No Definitions Found</h2>
+            <p className="py-2">
               Sorry pal, we couldn&apos;t find definitions for the word you were
               looking for.
             </p>
-            <p>
+            <p className="py-2">
               You can try the search again at later time or head to the web
               instead.
             </p>
+
+            <p
+              className="py-2"
+            >
+              Did you mean:{" "}
+              <a
+                href="#"
+                onClick={() => setSearchQuery(autocorrect()(searchQuery))}
+                className="text-green-900"
+              >
+                {autocorrect()(searchQuery)}
+              </a> ?
+
+            </p>
+
+
           </div>
         )}
         {status === "success" && (
           <div>
             {searchResults.map((wordData, index) => (
               <div key={index}>
-                <div className="flex justify-between">
-                  <div>
-                    <h2 className="text-2xl font-bold">{wordData.word}</h2>
-                    <p>{wordData.phonetic }</p>
-                  </div>
+                {/* first wordData t only have audio, phonetics, etc */}
 
-                  <FontAwesomeIcon
-                    icon={faPlay}
-                    onClick={() => playAudio(wordData.phonetics.audio)}
-                    className="cursor-pointer rounded-full border border-gray-500 p-4 text-sm"
-                  />
-                </div>
+                {index === 0 && (
+                  <div className="flex justify-between">
+                    <h2 className="py-4 text-2xl font-bold">
+                      {wordData.word}
+                    </h2>
+                    <div className="flex gap-4">
+
+                      <div key={index}>
+                        <button
+                          onClick={() =>
+                            (wordData.phonetics[0].audio) ? playAudio(wordData.phonetics[0].audio) : playAudio(wordData.phonetics[1].audio)
+                          }
+                          className="rounded border bg-green-800 p-3 text-white outline-none
+                            hover:bg-green-600 focus:bg-green-600
+                            "
+                        >
+                          <span>
+                            <FontAwesomeIcon icon={faPlayCircle} />
+                          </span>
+                          <span className="pl-2">
+                            {wordData.phonetics[0].text ? wordData.phonetics[0].text : wordData.phonetics[1].text}
+                          </span>
+                        </button>
+                      </div>
+
+                    </div>
+                  </div>
+                )}
+
+              
 
                 {wordData.meanings.map((meaning, index) => (
                   <div
                     key={index}
-                    className="my-5 rounded border border-red-300 p-3"
+                    className="my-5 rounded-none border-b border-gray-400 py-3"
                   >
-                    <h3>{meaning.partOfSpeech}</h3>
+                    <h3
+                      className="mb-5 flex text-xl italic underline"
+                    >{meaning.partOfSpeech}</h3>
+                    <p>
+                      Meaning
+                    </p>
                     {meaning.definitions.map((definition, index) => (
-                      <div key={index} className="my-5 rounded border p-3">
-                        <p>{definition.definition}</p>
+                      <div key={index} className={`py-3 ${index === meaning.definitions.length - 1 ? '' : 'border-b'}`}>
+                        <p
+                          className="py-2 text-sm"
+                        >
+                          <span
+                            className="text-sm font-bold text-green-900"
+                          >
+                            *
+                          </span>{" "}
+                          {definition.definition}</p>
 
                         {definition.synonyms.length > 0 && (
-                          <p>
+                          <p
+                            className="ml-4 py-2 text-sm"
+                          >
                             Synonyms:{" "}
                             {definition.synonyms.map((synonym, index) => (
                               <span key={index}>
-                               
-                                <a href="#" onClick={() => setSearchQuery(synonym)}>
-                                    {synonym}
+
+                                <a href="#" onClick={() => setSearchQuery(synonym)}
+                                  className="text-green-900"
+                                >
+                                  {synonym}
                                 </a>
-                               
+
 
                                 {index < definition.synonyms.length - 1
                                   ? ", "
@@ -128,12 +202,14 @@ export default function Home() {
                           </p>
                         )}
                         {definition.antonyms.length > 0 && (
-                          <p>
+                          <p className="ml-4 text-sm text-gray-500">
                             Antonyms:{" "}
                             {definition.antonyms.map((antonym, index) => (
                               <span key={index}>
-                              <a href="#" onClick={() => setSearchQuery(antonym)}>
-                                    {antonym}
+                                <a href="#" onClick={() => setSearchQuery(antonym)}
+                                  className="text-green-900"
+                                >
+                                  {antonym}
                                 </a>
 
 
@@ -145,21 +221,22 @@ export default function Home() {
                           </p>
                         )}
                         {definition.example && (
-                          <p>Example: {definition.example}</p>
+                          <p className="ml-4 text-sm text-gray-500">
+
+                            {definition.example}</p>
                         )}
                       </div>
                     ))}
                   </div>
                 ))}
 
-                <p>Source: {wordData.sourceUrls[0]}</p>
 
-                <p>License: {wordData.license.name}</p>
               </div>
             ))}
           </div>
         )}
       </main>
+      
     </>
   );
 }
